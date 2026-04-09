@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+==========================================================================
+【AI HANDOVER NOTE】
+1. DESIGN PHILOSOPHY:
+   - Luxury Dark Command Center: Cette application pour l'ONG MADE adopte une approche "Mission Control" avec un thème sombre luxueux inspiré des interfaces de contrôle professionnelles. Le design fusionne la rigueur opérationnelle d'un système de gestion humanitaire avec l'élégance visuelle d'une application premium.
+   - Visual Style: Glassmorphism 2.0 avec effets néon orange (#FF6600) sur fond noir profond (#000000). Utilisation intensive de rim-light pour créer une profondeur physique, ombres profondes pour la hiérarchie, et transitions fluides via Framer Motion pour une expérience tactile et réactive.
+   - Rationale: Le contraste noir/orange/blanc crée une lisibilité maximale pour un usage 24/7 en environnement humanitaire, réduit la fatigue oculaire, et projette une image professionnelle et moderne pour l'ONG.
+
+2. TYPOGRAPHY:
+   - Sans (Inter): Choisi pour sa lisibilité exceptionnelle en petites tailles, essentielle pour les tableaux de données denses (listes de présence, inventaires pharmacie). Son design géométrique moderne renforce le caractère professionnel et technologique de l'application. Les graisses 400-800 permettent une hiérarchie typographique claire.
+   - Mono (JetBrains Mono): Utilisé pour les codes-barres CODE128, identifiants UUID, timestamps de pointage, et données médicales. Sa lisibilité optimisée pour les caractères alphanumériques garantit une saisie sans erreur dans le mode kiosque.
+
+3. COLOR SYSTEM:
+   - Brand Primary (Orange #FF6600): Hue ~24° (orange vif) avec haute saturation pour créer l'effet néon signature. Mappé à --primary pour les CTA critiques (validation pointage, génération badges), --accent pour les highlights interactifs, et --ring pour les focus states du scanner laser.
+   - Semantic Colors: --destructive (rouge H:15°) pour les alertes d'évacuation et suppressions définitives, --success (vert H:150°) pour les validations de pointage et présences confirmées, --warning (orange-jaune H:45°) pour les seuils pharmacie et absences 3 jours.
+   - Dark Mode Dominance: background à L:0.08 (noir profond) avec foreground à L:0.98 (blanc pur) pour un contraste maximal. Les surfaces card utilisent L:0.12 avec glassmorphism (backdrop-blur) pour créer la profondeur visuelle. Les couleurs de chart utilisent des teintes orange/vert avec luminosité ajustée pour la lisibilité sur fond noir.
+
+4. USAGE GUIDE:
+   - Layout: Dashboard full-width avec sidebar fixe gauche (280px) contenant tous les modules. Zone centrale fluide pour les statistiques animées, graphiques dynamiques et tables de données. Mode kiosque plein écran sans sidebar pour le gardien.
+   - Effects: backdrop-blur(12px) sur les cards avec border orange néon (1px), box-shadow profonde (0 8px 32px rgba(255,102,0,0.15)) pour la profondeur, rim-light via gradient subtil sur les bords supérieurs des surfaces. Transitions Framer Motion (spring physics) pour tous les états interactifs.
+   - Specific Rules: Indicateurs de présence avec couleurs sémantiques (vert=présent, orange=absent 3j, rouge clignotant=longue durée). Feedback visuel immédiat après scan (photo membre + message géant). Toast notifications orange pour toutes les actions. Badges 85x55mm avec logo, photo, rôle et code-barres CODE128 en haute résolution pour impression professionnelle.
+==========================================================================
+*/
+
+:root {
+  /* Typography */
+  --font-sans: Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: JetBrains Mono, Consolas, monospace;
+  
+  /* Radius */
+  --radius: 0.75rem;
+
+  /* Core UI Tokens */
+  --background: oklch(0.98 0.005 270);
+  --foreground: oklch(0.09 0.01 270);
+  --card: oklch(0.99 0.003 270);
+  --card-foreground: oklch(0.09 0.01 270);
+  --popover: oklch(0.99 0.003 270);
+  --popover-foreground: oklch(0.09 0.01 270);
+  --primary: oklch(0.58 0.22 24);
+  --primary-foreground: oklch(0.99 0.005 24);
+  --secondary: oklch(0.92 0.01 270);
+  --secondary-foreground: oklch(0.15 0.01 270);
+  --muted: oklch(0.94 0.008 270);
+  --muted-foreground: oklch(0.48 0.015 270);
+  --accent: oklch(0.95 0.015 24);
+  --accent-foreground: oklch(0.15 0.01 270);
+  --destructive: oklch(0.55 0.22 15);
+  --destructive-foreground: oklch(0.99 0.005 15);
+  --border: oklch(0.88 0.01 270);
+  --input: oklch(0.88 0.01 270);
+  --ring: oklch(0.58 0.22 24);
+  
+  /* Chart Tokens */
+  --chart-1: oklch(0.58 0.22 24);
+  --chart-2: oklch(0.52 0.18 150);
+  --chart-3: oklch(0.48 0.15 270);
+  --chart-4: oklch(0.62 0.2 45);
+  --chart-5: oklch(0.45 0.16 320);
+  
+  /* Sidebar Tokens */
+  --sidebar: oklch(0.97 0.005 270);
+  --sidebar-foreground: oklch(0.15 0.01 270);
+  --sidebar-primary: oklch(0.58 0.22 24);
+  --sidebar-primary-foreground: oklch(0.99 0.005 24);
+  --sidebar-accent: oklch(0.94 0.012 24);
+  --sidebar-accent-foreground: oklch(0.15 0.01 270);
+  --sidebar-border: oklch(0.88 0.01 270);
+  --sidebar-ring: oklch(0.58 0.22 24);
+}
+
+.dark {
+  --background: oklch(0.08 0.01 270);
+  --foreground: oklch(0.98 0.005 270);
+  --card: oklch(0.12 0.015 270);
+  --card-foreground: oklch(0.98 0.005 270);
+  --popover: oklch(0.10 0.012 270);
+  --popover-foreground: oklch(0.98 0.005 270);
+  --primary: oklch(0.65 0.25 24);
+  --primary-foreground: oklch(0.08 0.01 24);
+  --secondary: oklch(0.18 0.02 270);
+  --secondary-foreground: oklch(0.95 0.008 270);
+  --muted: oklch(0.16 0.015 270);
+  --muted-foreground: oklch(0.62 0.02 270);
+  --accent: oklch(0.22 0.035 24);
+  --accent-foreground: oklch(0.98 0.005 270);
+  --destructive: oklch(0.58 0.24 15);
+  --destructive-foreground: oklch(0.98 0.005 15);
+  --border: oklch(0.22 0.025 270);
+  --input: oklch(0.22 0.025 270);
+  --ring: oklch(0.65 0.25 24);
+  
+  /* Chart Tokens */
+  --chart-1: oklch(0.65 0.25 24);
+  --chart-2: oklch(0.58 0.20 150);
+  --chart-3: oklch(0.55 0.18 270);
+  --chart-4: oklch(0.68 0.22 45);
+  --chart-5: oklch(0.52 0.19 320);
+  
+  /* Sidebar Tokens */
+  --sidebar: oklch(0.10 0.012 270);
+  --sidebar-foreground: oklch(0.95 0.008 270);
+  --sidebar-primary: oklch(0.65 0.25 24);
+  --sidebar-primary-foreground: oklch(0.08 0.01 24);
+  --sidebar-accent: oklch(0.20 0.03 24);
+  --sidebar-accent-foreground: oklch(0.98 0.005 270);
+  --sidebar-border: oklch(0.22 0.025 270);
+  --sidebar-ring: oklch(0.65 0.25 24);
+}
+
+@theme inline {
+  /* Shadcn Core Mapping */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Charts Mapping */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar Mapping */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans min-h-screen;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre {
+    @apply font-mono;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40;
+  }
+}
