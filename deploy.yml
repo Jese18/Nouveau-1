@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # Vérifie que ta branche principale s'appelle bien "main"
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node ⚙️
         uses: actions/setup-node@v4
         with:
-          node-id: 20
+          node-version: 20
           cache: 'npm'
 
       - name: Install and Build 🏗️
@@ -28,5 +28,6 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # Le dossier généré par Vite
-          branch: gh-pages # La branche où le site sera hébergé
+          folder: dist # <--- Indique à GitHub de ne prendre que le site compilé
+          branch: gh-pages # <--- La branche de destination
+          clean: true # <--- Supprime les anciens fichiers (comme le CNAME erroné)
