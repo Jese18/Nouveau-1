@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"] # Vérifie que ta branche principale s'appelle bien "main"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node ⚙️
+        uses: actions/setup-node@v4
+        with:
+          node-id: 20
+          cache: 'npm'
+
+      - name: Install and Build 🏗️
+        run: |
+          npm install --legacy-peer-deps
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist # Le dossier généré par Vite
+          branch: gh-pages # La branche où le site sera hébergé
